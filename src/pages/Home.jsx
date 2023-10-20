@@ -1,19 +1,20 @@
 import CustomButton from '../components/CustomButton';
 import { LOGIN_INFO_LOCAL } from '../constants';
 import useUserData from '../hooks/useUserData';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const userData = useUserData();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem(LOGIN_INFO_LOCAL);
 
-    navigate('/login')
-
+    // navigate('/login')
+    // TODO: change it with navigate after learning about React Context
+    window.location.href = '/';
   };
-  
+
   return (
     <div>
       <div>

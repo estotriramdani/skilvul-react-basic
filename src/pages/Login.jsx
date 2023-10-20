@@ -2,14 +2,20 @@ import { useState } from 'react';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { LOGIN_INFO_LOCAL } from '../constants';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import useUserData from '../hooks/useUserData';
 
 const LoginPage = () => {
+
+  // ambil login info dari local storage
+  const userData = useUserData();
+  console.log("🚀 ~ file: Login.jsx:12 ~ LoginPage ~ userData:", userData)
+  
   // siapkan state untuk menampung username dan password yang diinputkan oleh user
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +25,9 @@ const LoginPage = () => {
     localStorage.setItem(LOGIN_INFO_LOCAL, JSON.stringify({ username, password }));
 
     // navigate ke halaman `/`
-    navigate('/')
+    // navigate('/')
+    // TODO: change it with navigate after learning about React Context
+    window.location.href = '/'
   };
 
   return (
