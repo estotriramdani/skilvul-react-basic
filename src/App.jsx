@@ -3,6 +3,9 @@ import CustomInput from './components/CustomInput';
 import { LOGIN_INFO_LOCAL } from './constants';
 import CustomButton from './components/CustomButton';
 
+// 1. /login
+// 2. /
+
 export default function App() {
   // siapkan state untuk menampung username dan password yang diinputkan oleh user
   const [username, setUsername] = useState('');
