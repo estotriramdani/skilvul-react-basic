@@ -21,10 +21,13 @@ const CustomInput = (props) => {
       className="
       block
       border 
-      border-slate-500 
-      rounded py-2 px-3 
+      border-gray-700
+      rounded py-2 px-3
+      text-white
+      placeholder:text-gray-700 
       outline-none
       focus:ring-1
+      bg-transparent
       ring-slate-500
       ring-offset-1
       mb-2

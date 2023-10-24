@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-import CustomButton from '../components/CustomButton';
 import AppContext from '../contexts/AppContext';
 
 const HomePage = () => {
@@ -9,7 +8,6 @@ const HomePage = () => {
     <div>
       <div>
         <h1>Your info: {ctx.userData?.username}</h1>
-        <CustomButton onClick={ctx.handleLogout}>⬅️ Logout</CustomButton>
       </div>
     </div>
   );

@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router-dom';
 import { AppContextProvider } from '../contexts/AppContext';
+import Navbar from '../components/Navbar';
 
 const RootPage = () => {
   return (
     <AppContextProvider>
-      <div>
-        <nav className="p-3 bg-slate-900 text-white">this is nav</nav>
+      <div className='min-h-screen bg-gray-800'>
+        <Navbar />
         <Outlet />
       </div>
     </AppContextProvider>
