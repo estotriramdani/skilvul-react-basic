@@ -1,25 +1,15 @@
+import { useContext } from 'react';
 import CustomButton from '../components/CustomButton';
-import { LOGIN_INFO_LOCAL } from '../constants';
-import useUserData from '../hooks/useUserData';
-// import { useNavigate } from 'react-router-dom';
+import AppContext from '../contexts/AppContext';
 
 const HomePage = () => {
-  const userData = useUserData();
-  // const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem(LOGIN_INFO_LOCAL);
-
-    // navigate('/login')
-    // TODO: change it with navigate after learning about React Context
-    window.location.href = '/';
-  };
+  const ctx = useContext(AppContext);
 
   return (
     <div>
       <div>
-        <h1>Your info: {userData?.username}</h1>
-        <CustomButton onClick={handleLogout}>⬅️ Logout</CustomButton>
+        <h1>Your info: {ctx.userData.username}</h1>
+        <CustomButton onClick={ctx.handleLogout}>⬅️ Logout</CustomButton>
       </div>
     </div>
   );

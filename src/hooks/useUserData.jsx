@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { LOGIN_INFO_LOCAL } from '../constants';
 
+// hanya satu kali request ke browser
+
 export default function useUserData() {
   const [userData, setUserData] = useState(undefined);
 

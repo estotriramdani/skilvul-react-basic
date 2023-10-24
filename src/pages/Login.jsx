@@ -1,16 +1,12 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
-import { LOGIN_INFO_LOCAL } from '../constants';
+import AppContext from '../contexts/AppContext';
 // import { useNavigate } from 'react-router-dom';
-import useUserData from '../hooks/useUserData';
 
 const LoginPage = () => {
+  const ctx = useContext(AppContext)
 
-  // ambil login info dari local storage
-  const userData = useUserData();
-  console.log("🚀 ~ file: Login.jsx:12 ~ LoginPage ~ userData:", userData)
-  
   // siapkan state untuk menampung username dan password yang diinputkan oleh user
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -21,13 +17,7 @@ const LoginPage = () => {
     event.preventDefault();
     // TODO: fetch API Login and save the response to localStorage
 
-    // set data login (yang dikirim dari backend di real case) ke localStorage untuk digunakan sebagai authentication. Simpan ke localStorage sebagai string
-    localStorage.setItem(LOGIN_INFO_LOCAL, JSON.stringify({ username, password }));
-
-    // navigate ke halaman `/`
-    // navigate('/')
-    // TODO: change it with navigate after learning about React Context
-    window.location.href = '/'
+    ctx.handleLogin(username, password)
   };
 
   return (
