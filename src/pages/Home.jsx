@@ -8,7 +8,7 @@ const HomePage = () => {
   return (
     <div>
       <div>
-        <h1>Your info: {ctx.userData.username}</h1>
+        <h1>Your info: {ctx.userData?.username}</h1>
         <CustomButton onClick={ctx.handleLogout}>⬅️ Logout</CustomButton>
       </div>
     </div>

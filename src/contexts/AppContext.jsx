@@ -29,7 +29,7 @@ Poster harus dibentangkan. Kalau Provider component, jadikan dia parent semua co
 import PropTypes from 'prop-types';
 import { createContext, useEffect, useState } from 'react';
 import { LOGIN_INFO_LOCAL } from '../constants';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const AppContext = createContext({
   userData: null,
@@ -40,8 +40,8 @@ const AppContext = createContext({
 export default AppContext;
 
 export const AppContextProvider = ({ children }) => {
-  const [userData, setUserData] = useState(null);
-  // const navigate = useNavigate();
+  const [userData, setUserData] = useState(undefined);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // dapatkan login info untuk memastikan user tersebut sudah login atau belum
@@ -58,17 +58,29 @@ export const AppContextProvider = ({ children }) => {
   const handleLogin = (username, password) => {
     // set data login (yang dikirim dari backend di real case) ke localStorage untuk digunakan sebagai authentication. Simpan ke localStorage sebagai string
     localStorage.setItem(LOGIN_INFO_LOCAL, JSON.stringify({ username, password }));
-    // TODO: change it with navigate after learning about React Context
-    window.location.href = '/';
-    // navigate('/');
+    setUserData({
+      username,
+      password,
+    });
+    navigate('/');
   };
 
   const handleLogout = () => {
     localStorage.removeItem(LOGIN_INFO_LOCAL);
-    // TODO: change it with navigate after learning about React Context
-    window.location.href = '/';
-    // navigate('/login');
+    setUserData(null);
+    navigate('/login');
   };
+
+  // proses autentikasi
+  useEffect(() => {
+    if (userData !== undefined && userData === null) {
+      navigate('/login');
+    }
+
+    if (userData !== undefined && userData !== null && window.location.href.includes('/login')) {
+      navigate('/')
+    }
+  }, [userData]);
 
   return (
     <AppContext.Provider
