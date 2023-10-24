@@ -53,7 +53,7 @@ export const AppContextProvider = ({ children }) => {
     } else {
       setUserData(null);
     }
-  }, [setUserData]);
+  }, []);
 
   const handleLogin = (username, password) => {
     // set data login (yang dikirim dari backend di real case) ke localStorage untuk digunakan sebagai authentication. Simpan ke localStorage sebagai string
