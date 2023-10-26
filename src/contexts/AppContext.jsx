@@ -35,12 +35,16 @@ const AppContext = createContext({
   userData: null,
   handleLogin: (username, password) => {},
   handleLogout: () => {},
+  todos: [],
+  isLoading: true,
 });
 
 export default AppContext;
 
 export const AppContextProvider = ({ children }) => {
   const [userData, setUserData] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+  const [todos, setTodos] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -78,13 +82,31 @@ export const AppContextProvider = ({ children }) => {
     }
 
     if (userData !== undefined && userData !== null && window.location.href.includes('/login')) {
-      navigate('/')
+      navigate('/');
     }
   }, [userData]);
 
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const response = await fetch('https://6527e890931d71583df19400.mockapi.io/api/todos');
+      if (response.ok) {
+        const responseJson = await response.json();
+        setTodos(responseJson);
+      }
+      setIsLoading(false);
+    };
+    fetchTodos();
+  }, []);
+
   return (
     <AppContext.Provider
-      value={{ userData: userData, handleLogin: handleLogin, handleLogout: handleLogout }}
+      value={{
+        userData: userData,
+        handleLogin: handleLogin,
+        handleLogout: handleLogout,
+        todos: todos,
+        isLoading: isLoading
+      }}
     >
       {children}
     </AppContext.Provider>
