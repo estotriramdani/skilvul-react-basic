@@ -8,9 +8,10 @@ const HomePage = () => {
   const ctx = useContext(AppContext);
   const [todo, setTodo] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(todo)
+    await ctx.handleAddTodo(todo);
+    setTodo('');
   };
 
   return (
@@ -21,8 +22,11 @@ const HomePage = () => {
       </form>
       <div className="flex gap-3 flex-col-reverse">
         {ctx.todos.map((todo) => (
-          <TodoCard key={todo.id} todo={todo.todo} createdAt={todo.createdAt} />
+          <TodoCard key={todo.id} todo={todo.todo} createdAt={todo.createdAt} id={todo.id} />
         ))}
+        {ctx.isLoading && (
+          <div className="w-full h-20 animate-pulse bg-gray-400 flex-shrink-0 rounded-lg"></div>
+        )}
       </div>
     </div>
   );

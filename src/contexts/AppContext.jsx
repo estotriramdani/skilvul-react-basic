@@ -31,12 +31,16 @@ import { createContext, useEffect, useState } from 'react';
 import { LOGIN_INFO_LOCAL } from '../constants';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = 'https://6527e890931d71583df19400.mockapi.io/api/todos';
+
 const AppContext = createContext({
   userData: null,
   handleLogin: (username, password) => {},
   handleLogout: () => {},
   todos: [],
   isLoading: true,
+  handleAddTodo: async (todo) => {},
+  handleDeleteTodo: async (id) => {}
 });
 
 export default AppContext;
@@ -75,6 +79,29 @@ export const AppContextProvider = ({ children }) => {
     navigate('/login');
   };
 
+  const handleAddTodo = async (todo) => {
+    setIsLoading(true);
+    try {
+      const body = { id: new Date().getTime().toString(), todo: todo, createdAt: new Date().toISOString() };
+      const response = await fetch(API_URL, {
+        body: JSON.stringify(body),
+        method: 'POST'
+      });
+      if (response.ok) {
+        setTodos([...todos, body]);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const filteredTodos = todos.filter(todo => todo.id !== id);
+    setTodos(filteredTodos);
+  };
+  
   // proses autentikasi
   useEffect(() => {
     if (userData !== undefined && userData === null) {
@@ -88,7 +115,7 @@ export const AppContextProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await fetch('https://6527e890931d71583df19400.mockapi.io/api/todos');
+      const response = await fetch(API_URL);
       if (response.ok) {
         const responseJson = await response.json();
         setTodos(responseJson);
@@ -105,7 +132,9 @@ export const AppContextProvider = ({ children }) => {
         handleLogin: handleLogin,
         handleLogout: handleLogout,
         todos: todos,
-        isLoading: isLoading
+        isLoading: isLoading,
+        handleAddTodo: handleAddTodo,
+        handleDeleteTodo: handleDelete
       }}
     >
       {children}
