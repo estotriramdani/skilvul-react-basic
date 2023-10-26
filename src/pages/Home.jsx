@@ -15,18 +15,20 @@ const HomePage = () => {
   };
 
   return (
-    <div className="pt-20 px-6 text-white">
-      <form onSubmit={handleSubmit} className="mb-4">
-        <CustomInput value={todo} onChange={(event) => setTodo(event.target.value)} />
-        <CustomButton>Add Todo</CustomButton>
-      </form>
-      <div className="flex gap-3 flex-col-reverse">
-        {ctx.todos.map((todo) => (
-          <TodoCard key={todo.id} todo={todo.todo} createdAt={todo.createdAt} id={todo.id} />
-        ))}
-        {ctx.isLoading && (
-          <div className="w-full h-20 animate-pulse bg-gray-400 flex-shrink-0 rounded-lg"></div>
-        )}
+    <div className="pt-20 px-6 text-white mx-auto flex flex-col items-center">
+      <div className="max-w-md">
+        <form onSubmit={handleSubmit} className="mb-4">
+          <CustomInput value={todo} onChange={(event) => setTodo(event.target.value)} />
+          <CustomButton type="submit">Add Todo</CustomButton>
+        </form>
+        <div className="flex gap-3 flex-col-reverse">
+          {ctx.todos.map((todo) => (
+            <TodoCard key={todo.id} todo={todo.todo} createdAt={todo.createdAt} id={todo.id} />
+          ))}
+          {ctx.isLoading && (
+            <div className="w-full h-20 animate-pulse bg-gray-400 flex-shrink-0 rounded-lg"></div>
+          )}
+        </div>
       </div>
     </div>
   );

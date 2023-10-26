@@ -40,7 +40,7 @@ const AppContext = createContext({
   todos: [],
   isLoading: true,
   handleAddTodo: async (todo) => {},
-  handleDeleteTodo: async (id) => {}
+  handleDeleteTodo: async (id) => {},
 });
 
 export default AppContext;
@@ -82,10 +82,14 @@ export const AppContextProvider = ({ children }) => {
   const handleAddTodo = async (todo) => {
     setIsLoading(true);
     try {
-      const body = { id: new Date().getTime().toString(), todo: todo, createdAt: new Date().toISOString() };
+      const body = {
+        id: new Date().getTime().toString(),
+        todo: todo,
+        createdAt: new Date().toISOString(),
+      };
       const response = await fetch(API_URL, {
         body: JSON.stringify(body),
-        method: 'POST'
+        method: 'POST',
       });
       if (response.ok) {
         setTodos([...todos, body]);
@@ -98,10 +102,22 @@ export const AppContextProvider = ({ children }) => {
   };
 
   const handleDelete = async (id) => {
-    const filteredTodos = todos.filter(todo => todo.id !== id);
-    setTodos(filteredTodos);
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        const filteredTodos = todos.filter((todo) => todo.id !== id);
+        setTodos(filteredTodos);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
-  
+
   // proses autentikasi
   useEffect(() => {
     if (userData !== undefined && userData === null) {
@@ -134,7 +150,7 @@ export const AppContextProvider = ({ children }) => {
         todos: todos,
         isLoading: isLoading,
         handleAddTodo: handleAddTodo,
-        handleDeleteTodo: handleDelete
+        handleDeleteTodo: handleDelete,
       }}
     >
       {children}
