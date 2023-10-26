@@ -92,7 +92,8 @@ export const AppContextProvider = ({ children }) => {
         method: 'POST',
       });
       if (response.ok) {
-        setTodos([...todos, body]);
+        const responseJson = await response.json();
+        setTodos([...todos, responseJson]);
       }
     } catch (error) {
       console.log(error);
