@@ -53,7 +53,7 @@ function CloudinaryUploadWidget({ uwConfig, setPublicId, setFileUrl}) {
         onClick={initializeCloudinaryWidget}
         type="button"
       >
-        Upload
+        📂 Add Attachment
       </button>
     </CloudinaryScriptContext.Provider>
   );

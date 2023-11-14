@@ -10,8 +10,8 @@ const HomePage = () => {
   const [todo, setTodo] = useState('');
 
   const [fileUrl, setFileUrl] = useState('');
-  
-  const [publicId, setPublicId] = useState();
+
+  const [, setPublicId] = useState();
   // Replace with your own cloud name
   const [cloudName] = useState(import.meta.env.VITE_CLOUDINARY_NAME);
   // Replace with your own upload preset
@@ -35,22 +35,31 @@ const HomePage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(fileUrl);
-    await ctx.handleAddTodo(todo);
+    await ctx.handleAddTodo(todo, fileUrl);
     setTodo('');
   };
 
   return (
     <div className="pt-20 px-6 text-white mx-auto flex flex-col items-center">
-      <div className="max-w-md">
+      <div className="w-1/2 mx-auto">
         <form onSubmit={handleSubmit} className="mb-4">
           <CustomInput value={todo} onChange={(event) => setTodo(event.target.value)} />
-          <CloudinaryUploadWidget uwConfig={uwConfig} setPublicId={setPublicId} setFileUrl={setFileUrl} />
+          <CloudinaryUploadWidget
+            uwConfig={uwConfig}
+            setPublicId={setPublicId}
+            setFileUrl={setFileUrl}
+          />
           <CustomButton type="submit">Add Todo</CustomButton>
         </form>
         <div className="flex gap-3 flex-col-reverse">
           {ctx.todos.map((todo) => (
-            <TodoCard key={todo.id} todo={todo.todo} createdAt={todo.createdAt} id={todo.id} />
+            <TodoCard
+              key={todo.id}
+              todo={todo.todo}
+              attachment={todo.attachment}
+              createdAt={todo.createdAt}
+              id={todo.id}
+            />
           ))}
           {ctx.isLoading && (
             <div className="w-full h-20 animate-pulse bg-gray-400 flex-shrink-0 rounded-lg"></div>

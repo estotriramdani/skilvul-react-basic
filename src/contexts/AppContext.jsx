@@ -30,8 +30,11 @@ import PropTypes from 'prop-types';
 import { createContext, useEffect, useState } from 'react';
 import { LOGIN_INFO_LOCAL } from '../constants';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
-const API_URL = 'https://6527e890931d71583df19400.mockapi.io/api/todos';
+const API_URL = `${import.meta.env.VITE_API_URL}/todos`;
+
+console.log(API_URL)
 
 const AppContext = createContext({
   userData: null,
@@ -39,7 +42,7 @@ const AppContext = createContext({
   handleLogout: () => {},
   todos: [],
   isLoading: true,
-  handleAddTodo: async (todo) => {},
+  handleAddTodo: async (todo, fileUrl) => {},
   handleDeleteTodo: async (id) => {},
 });
 
@@ -57,19 +60,35 @@ export const AppContextProvider = ({ children }) => {
 
     if (loginLocal) {
       const parsed = JSON.parse(loginLocal);
-      setUserData({ username: parsed.username });
+      setUserData(parsed);
     } else {
       setUserData(null);
     }
   }, []);
 
-  const handleLogin = (username, password) => {
+  const handleLogin = async (username, password) => {
     // set data login (yang dikirim dari backend di real case) ke localStorage untuk digunakan sebagai authentication. Simpan ke localStorage sebagai string
-    localStorage.setItem(LOGIN_INFO_LOCAL, JSON.stringify({ username, password }));
-    setUserData({
-      username,
-      password,
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+      method: 'POST',
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
+
+    if (!response.ok) {
+      toast.error('Username atau password salah');
+      return;
+    }
+
+    const responseJson = await response.json();
+
+    localStorage.setItem(LOGIN_INFO_LOCAL, JSON.stringify(responseJson));
+
+    setUserData(responseJson);
     navigate('/');
   };
 
@@ -79,17 +98,22 @@ export const AppContextProvider = ({ children }) => {
     navigate('/login');
   };
 
-  const handleAddTodo = async (todo) => {
+  const handleAddTodo = async (todo, fileUrl) => {
     setIsLoading(true);
     try {
       const body = {
         id: new Date().getTime().toString(),
         todo: todo,
+        attachment: fileUrl,
         createdAt: new Date().toISOString(),
       };
       const response = await fetch(API_URL, {
         body: JSON.stringify(body),
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userData.token}`,
+        },
       });
       if (response.ok) {
         const responseJson = await response.json();
@@ -107,6 +131,9 @@ export const AppContextProvider = ({ children }) => {
       setIsLoading(true);
       const response = await fetch(`${API_URL}/${id}`, {
         method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        }
       });
       if (response.ok) {
         const filteredTodos = todos.filter((todo) => todo.id !== id);

@@ -3,7 +3,7 @@ import CustomButton from './CustomButton';
 import PropTypes from 'prop-types';
 import AppContext from '../contexts/AppContext';
 
-const TodoCard = ({ id, todo, createdAt }) => {
+const TodoCard = ({ id, todo, createdAt, attachment }) => {
   const ctx = useContext(AppContext);
 
   return (
@@ -11,6 +11,7 @@ const TodoCard = ({ id, todo, createdAt }) => {
       <div>
         <p>{todo}</p>
         <p>{createdAt}</p>
+        {attachment && <a href={attachment}>Click to see</a>}
       </div>
       <CustomButton onClick={() => ctx.handleDeleteTodo(id)}>🗑️</CustomButton>
     </div>
@@ -20,6 +21,7 @@ const TodoCard = ({ id, todo, createdAt }) => {
 TodoCard.propTypes = {
   id: PropTypes.string,
   todo: PropTypes.string,
+  attachment: PropTypes.string,
   createdAt: PropTypes.string,
 };
 
